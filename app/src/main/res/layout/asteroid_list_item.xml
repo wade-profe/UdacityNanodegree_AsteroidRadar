@@ -15,7 +15,7 @@
         android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_light">
+        android:background="@color/app_background">
 
         <TextView
             android:id="@+id/asteroid_codename"
@@ -26,6 +26,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="24sp"
+            android:layout_marginStart="20dp"
             tools:text="68347 (2001 KB67)"
             android:text="@{asteroid.codename}"
             />
@@ -38,6 +39,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             tools:text="2020-02-08"
             android:textSize="20sp"
+            android:layout_marginStart="20dp"
+
             android:textColor="@android:color/darker_gray"
             android:text="@{asteroid.closeApproachDate}"
             />
