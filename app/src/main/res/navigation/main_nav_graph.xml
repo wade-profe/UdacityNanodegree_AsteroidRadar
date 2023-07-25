@@ -8,7 +8,7 @@
         android:id="@+id/mainFragment"
         android:name="com.udacity.asteroidradar.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_showDetail"
             app:destination="@id/detailFragment" />
