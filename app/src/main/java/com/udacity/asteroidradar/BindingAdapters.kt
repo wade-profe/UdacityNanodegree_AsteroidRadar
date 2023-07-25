@@ -1,7 +1,9 @@
 package com.udacity.asteroidradar
 
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.main.AsteroidListAdapter
@@ -43,7 +45,12 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 }
 
 @BindingAdapter("listData")
-fun setRecycleViewList(recyclerView: RecyclerView, data: ArrayList<Asteroid>){
+fun setRecycleViewList(recyclerView: RecyclerView, data: List<Asteroid>){
     val adapter = recyclerView.adapter as AsteroidListAdapter
     adapter.submitList(data)
+}
+
+@BindingAdapter("isVisible")
+fun setIsVisible(progressBar: ProgressBar, visibility: Boolean){
+    progressBar.isVisible = visibility
 }

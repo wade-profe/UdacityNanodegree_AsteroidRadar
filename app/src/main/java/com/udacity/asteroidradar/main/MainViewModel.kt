@@ -2,28 +2,31 @@ package com.udacity.asteroidradar.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.api.NeoWService
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class MainViewModel : ViewModel() {
 
-    var asteroids = MutableLiveData<ArrayList<Asteroid>>()
+    var asteroids = MutableLiveData(listOf<Asteroid>())
+    var listLoading = MutableLiveData(false)
 
     init {
         fetchAsteroids()
     }
 
     private fun fetchAsteroids(){
-        val newAsteroids: ArrayList<Asteroid> = ArrayList()
-        newAsteroids.addAll(listOf(
-            Asteroid(1L, "codeName1", "2023-07-15",
-                2.53, 3.45, 1.23, 3.45, true),
-            Asteroid(1L, "codeName2", "2023-07-16",
-                2.53, 3.45, 1.23, 3.45, false),
-                    Asteroid(1L, "codeName3", "2023-07-17",
-            2.53, 3.45, 1.23, 3.45, true),
-            Asteroid(1L, "codeName4", "2023-07-18",
-                2.53, 3.45, 1.23, 3.45, false)))
-        asteroids.value = newAsteroids
+        viewModelScope.launch{
+            listLoading.value = true
+            val result = NeoWService.feedService.getFeed()
+            if(result.isSuccessful){
+                asteroids.value = parseAsteroidsJsonResult(JSONObject(result.body() ?: ""))
+            }
+            listLoading.value = false
+        }
     }
 
 }
