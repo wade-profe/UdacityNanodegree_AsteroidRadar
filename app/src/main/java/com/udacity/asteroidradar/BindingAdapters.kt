@@ -45,12 +45,12 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 }
 
 @BindingAdapter("listData")
-fun setRecycleViewList(recyclerView: RecyclerView, data: List<Asteroid>){
+fun setRecycleViewList(recyclerView: RecyclerView, data: List<Asteroid>?){
     val adapter = recyclerView.adapter as AsteroidListAdapter
     adapter.submitList(data)
 }
 
 @BindingAdapter("isVisible")
-fun setIsVisible(progressBar: ProgressBar, visibility: Boolean){
-    progressBar.isVisible = visibility
+fun setIsVisible(progressBar: ProgressBar, list: List<Asteroid>?){
+    progressBar.isVisible = list.isNullOrEmpty()
 }

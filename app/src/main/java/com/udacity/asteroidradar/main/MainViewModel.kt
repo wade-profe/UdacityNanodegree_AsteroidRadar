@@ -1,32 +1,27 @@
 package com.udacity.asteroidradar.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.api.NeoWService
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.AsteroidRepository
+import com.udacity.asteroidradar.database.getDatabase
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    var asteroids = MutableLiveData(listOf<Asteroid>())
-    var listLoading = MutableLiveData(false)
+    private val database = getDatabase(application)
+    private val repository = AsteroidRepository(database)
 
     init {
-        fetchAsteroids()
-    }
-
-    private fun fetchAsteroids(){
-        viewModelScope.launch{
-            listLoading.value = true
-            val result = NeoWService.feedService.getFeed()
-            if(result.isSuccessful){
-                asteroids.value = parseAsteroidsJsonResult(JSONObject(result.body() ?: ""))
-            }
-            listLoading.value = false
+        viewModelScope.launch {
+            repository.retrieveAsteroids()
         }
     }
+
+    val asteroids = repository.asteroids
+
+
+
+
 
 }

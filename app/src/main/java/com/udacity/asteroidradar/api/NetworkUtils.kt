@@ -57,7 +57,7 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     return formattedDateList
 }
 
-fun List<Asteroid>.asDatabaseModel(): List<DatabaseAsteroid> {
+fun List<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroid> {
     return this.map {
         DatabaseAsteroid(
             it.id.toInt(),
@@ -72,5 +72,5 @@ fun List<Asteroid>.asDatabaseModel(): List<DatabaseAsteroid> {
                 false -> 0
             }
         )
-    }
+    }.toTypedArray()
 }
