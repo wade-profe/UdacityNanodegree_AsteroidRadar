@@ -17,6 +17,13 @@ data class DatabaseAsteroid constructor(
     val isPotentiallyHazardous: Int
 )
 
+@Entity
+data class DatabasePictureOfDay constructor(
+    @PrimaryKey
+    val url: String,
+    val title: String
+)
+
 fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid>{
     return this.map {
         Asteroid(it.id.toLong(),

@@ -67,7 +67,7 @@ fun List<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroid> {
             it.estimatedDiameter.toString(),
             it.relativeVelocity.toString(),
             it.distanceFromEarth.toString(),
-            when(it.isPotentiallyHazardous){
+            when (it.isPotentiallyHazardous) {
                 true -> 1
                 false -> 0
             }

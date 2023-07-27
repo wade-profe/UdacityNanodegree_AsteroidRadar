@@ -15,10 +15,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         viewModelScope.launch {
             repository.retrieveAsteroids()
+            repository.retrieveDailyImage()
         }
     }
 
     val asteroids = repository.asteroids
+    val imageOfTheDay = repository.imageOfTheDay
 
 
 
