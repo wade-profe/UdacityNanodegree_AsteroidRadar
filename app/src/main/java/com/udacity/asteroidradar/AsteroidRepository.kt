@@ -20,11 +20,11 @@ import java.util.Locale
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
+    private var currentDate: String = getTodaysDate()
     val asteroids: LiveData<List<Asteroid>> =
-        database.asteroidDao.getAsteroidList().map {
+        database.asteroidDao.getAsteroidList(currentDate).map {
             it.asDomainModel()
         }
-    private var currentDate: String = getTodaysDate()
     val imageOfTheDay: LiveData<DatabasePictureOfDay> =
         database.pictureOfDayDao.getPictureOfDay()
 
@@ -36,9 +36,9 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     }
 
     suspend fun retrieveDailyImage() {
+        val latestDate: String? = imageOfTheDay.value?.date
         withContext(Dispatchers.IO) {
-            if (database.pictureOfDayDao.getPictureOfDay().value?.date != currentDate) {
-                Log.d("WADE", "Retrieving picture of the day")
+            if (latestDate != currentDate) {
                 val response = ApodService.apodService.getImageOfTheDay()
                 if (response.isSuccessful) {
                     response.body().apply {
