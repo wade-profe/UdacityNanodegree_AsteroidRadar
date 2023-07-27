@@ -11,6 +11,7 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Update
+import androidx.room.migration.Migration
 
 @Dao
 interface AsteroidDao{
@@ -23,18 +24,20 @@ interface AsteroidDao{
     //todo filter for date >= today
 }
 
+@Dao
 interface PictureOfDayDao{
-    @Query("select * FROM databasepictureofday")
-    fun getPictureOfDay(): LiveData<List<DatabasePictureOfDay>>
+    @Query("select * FROM databasepictureofday ORDER BY date DESC LIMIT 1")
+    fun getPictureOfDay(): LiveData<DatabasePictureOfDay>
 
-    @Query("INSERT OR REPLACE INTO databasepictureofday (url, title) VALUEs (:url, :title)")
-    fun insertNewImage(url: String, title: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertImage(picture: DatabasePictureOfDay)
 
 }
 
-@Database(entities = [DatabaseAsteroid::class], version = 1)
+@Database(entities = [DatabaseAsteroid::class, DatabasePictureOfDay::class], version = 4)
 abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
+    abstract val pictureOfDayDao: PictureOfDayDao
 }
 
 private lateinit var INSTANCE: AsteroidDatabase
@@ -44,7 +47,7 @@ fun getDatabase(context: Context): AsteroidDatabase {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
                 AsteroidDatabase::class.java,
-                "asteroids").build()
+                "asteroids").fallbackToDestructiveMigration().build()
         }
     }
     return INSTANCE

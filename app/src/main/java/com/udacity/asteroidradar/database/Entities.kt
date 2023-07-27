@@ -20,6 +20,7 @@ data class DatabaseAsteroid constructor(
 @Entity
 data class DatabasePictureOfDay constructor(
     @PrimaryKey
+    val date: String,
     val url: String,
     val title: String
 )

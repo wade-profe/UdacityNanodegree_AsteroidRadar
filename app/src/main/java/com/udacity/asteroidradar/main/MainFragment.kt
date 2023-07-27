@@ -27,9 +27,8 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
 
         viewModel.imageOfTheDay.observe(viewLifecycleOwner, Observer {
-            Picasso.with(requireContext()).load(it.url)
+            Picasso.with(requireContext()).load(it?.url)
                 .placeholder(R.drawable.placeholder_picture_of_day)
-                .error(R.drawable.image_load_error_foreground)
                 .into(binding.activityMainImageOfTheDay);
         })
 

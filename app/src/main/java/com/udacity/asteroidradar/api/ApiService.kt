@@ -14,7 +14,7 @@ import retrofit2.http.Query
 private val retrofit_NeoWs = Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create())
     .baseUrl(Constants.BASE_URL).build()
 
-val moshi = Moshi.Builder()
+val moshi: Moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
@@ -34,7 +34,6 @@ interface Apod {
 
 object NeoWService {
     val feedService: NeoWs by lazy {retrofit_NeoWs.create(NeoWs::class.java)}
-
 }
 
 object ApodService {
