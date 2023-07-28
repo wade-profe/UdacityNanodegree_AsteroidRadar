@@ -1,7 +1,6 @@
 package com.udacity.asteroidradar.database
 
 import android.content.Context
-import android.provider.ContactsContract.Data
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Database
@@ -10,8 +9,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.Update
-import androidx.room.migration.Migration
 
 @Dao
 interface AsteroidDao{
@@ -20,7 +17,13 @@ interface AsteroidDao{
     fun insertAll(vararg asteroids: DatabaseAsteroid)
 
     @Query("select * FROM databaseasteroid WHERE closeApproachDate >= :currentDate ORDER BY closeApproachDate ASC")
-    fun getAsteroidList(currentDate: String): LiveData<List<DatabaseAsteroid>>
+    fun getWeekList(currentDate: String): LiveData<List<DatabaseAsteroid>>
+
+    @Query("select * FROM databaseasteroid WHERE closeApproachDate = :currentDate")
+    fun getTodayList(currentDate: String): LiveData<List<DatabaseAsteroid>>
+
+    @Query("select * FROM databaseasteroid ORDER BY closeApproachDate ASC")
+    fun getSavedList(): LiveData<List<DatabaseAsteroid>>
 }
 
 @Dao

@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -44,6 +45,16 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.show_saved_menu -> {
+                viewModel.updateFilter(FilterValues.SAVED)}
+            R.id.show_today_menu -> {
+                viewModel.updateFilter(FilterValues.DAY)
+            }
+            R.id.show_week_menu -> {
+                viewModel.updateFilter(FilterValues.WEEK)
+            }
+        }
         return true
     }
 }

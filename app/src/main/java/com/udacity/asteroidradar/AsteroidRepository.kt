@@ -2,7 +2,6 @@ package com.udacity.asteroidradar
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.udacity.asteroidradar.api.ApodService
 import com.udacity.asteroidradar.api.NeoWService
@@ -21,10 +20,25 @@ import java.util.Locale
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
     private var currentDate: String = getTodaysDate()
-    val asteroids: LiveData<List<Asteroid>> =
-        database.asteroidDao.getAsteroidList(currentDate).map {
+
+    val weekAsteroids: LiveData<List<Asteroid>> =
+        database.asteroidDao.getWeekList(currentDate).map {
             it.asDomainModel()
         }
+
+    val todayAsteroids: LiveData<List<Asteroid>> by lazy{
+        database.asteroidDao.getTodayList(currentDate).map {
+            it.asDomainModel()
+        }
+    }
+
+
+    val allAsteroids: LiveData<List<Asteroid>> by lazy{
+        database.asteroidDao.getSavedList().map {
+            it.asDomainModel()
+        }
+    }
+
     val imageOfTheDay: LiveData<DatabasePictureOfDay?> =
         database.pictureOfDayDao.getPictureOfDay()
 
@@ -37,8 +51,8 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
     suspend fun retrieveDailyImage() {
         val latestDate: String? = imageOfTheDay.value?.date
-        withContext(Dispatchers.IO) {
-            if (latestDate != currentDate) {
+        if (latestDate != currentDate) {
+            withContext(Dispatchers.IO) {
                 val response = ApodService.apodService.getImageOfTheDay()
                 if (response.isSuccessful) {
                     response.body().apply {
@@ -50,7 +64,6 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
                     }
                 }
             }
-
         }
     }
 
