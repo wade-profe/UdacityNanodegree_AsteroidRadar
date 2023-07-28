@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import android.media.Image
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -7,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.main.AsteroidListAdapter
+import com.udacity.asteroidradar.main.MainViewModel
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -53,4 +55,13 @@ fun setRecycleViewList(recyclerView: RecyclerView, data: List<Asteroid>?){
 @BindingAdapter("isVisible")
 fun setIsVisible(progressBar: ProgressBar, list: List<Asteroid>?){
     progressBar.isVisible = list.isNullOrEmpty()
+}
+
+@BindingAdapter("setContentDescription")
+fun setContentDescription(image: ImageView, title: String?){
+    val context = image.context
+    image.contentDescription = title?.let {
+        context.getString(R.string.nasa_picture_of_day_content_description_format, it)
+    } ?: context.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+
 }

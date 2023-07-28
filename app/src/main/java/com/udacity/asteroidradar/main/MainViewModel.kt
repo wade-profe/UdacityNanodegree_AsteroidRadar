@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.AsteroidRepository
 import com.udacity.asteroidradar.InternetCheck
@@ -19,8 +21,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         if (InternetCheck.isConnected(application)) {
             viewModelScope.launch {
-                repository.retrieveAsteroids()
-                repository.retrieveDailyImage()
+                try{
+                    repository.retrieveAsteroids()
+                    repository.retrieveDailyImage()
+                } catch (e: Exception){
+                    Log.e(this.javaClass.simpleName, e.localizedMessage)
+                }
             }
         } else {
             Toast.makeText(
@@ -34,6 +40,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val asteroids = repository.asteroids
     val imageOfTheDay = repository.imageOfTheDay
-
+    val imageOfTheDayTitle: LiveData<String?> =
+        imageOfTheDay.map {
+            it?.title
+        }
 
 }

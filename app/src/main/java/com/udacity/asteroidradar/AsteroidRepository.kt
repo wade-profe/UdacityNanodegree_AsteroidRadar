@@ -25,7 +25,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         database.asteroidDao.getAsteroidList(currentDate).map {
             it.asDomainModel()
         }
-    val imageOfTheDay: LiveData<DatabasePictureOfDay> =
+    val imageOfTheDay: LiveData<DatabasePictureOfDay?> =
         database.pictureOfDayDao.getPictureOfDay()
 
     suspend fun retrieveAsteroids() {
