@@ -1,4 +1,4 @@
-package com.udacity.asteroidradar.main
+package com.udacity.asteroidradar.ui.main
 
 import android.app.Application
 import android.util.Log
@@ -9,9 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.AsteroidRepository
-import com.udacity.asteroidradar.InternetCheck
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.repositories.AsteroidRepository
+import com.udacity.asteroidradar.utils.InternetCheck
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.database.getDatabase
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     repository.retrieveAsteroids()
                     repository.retrieveDailyImage()
                 } catch (e: Exception){
-                    Log.e(this.javaClass.simpleName, e.localizedMessage)
+                    e.localizedMessage?.let { Log.e(this.javaClass.simpleName, it) }
                 }
             }
         } else {
@@ -46,7 +46,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    val asteroids: LiveData<List<Asteroid>> = currentFilter.switchMap {filter ->
+    val asteroids: LiveData<List<Asteroid>> = currentFilter.switchMap { filter ->
         when(filter){
             FilterValues.DAY -> repository.todayAsteroids
             FilterValues.SAVED -> repository.allAsteroids

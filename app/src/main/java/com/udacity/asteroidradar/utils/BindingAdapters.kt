@@ -1,21 +1,24 @@
-package com.udacity.asteroidradar
+package com.udacity.asteroidradar.utils
 
-import android.media.Image
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.udacity.asteroidradar.main.AsteroidListAdapter
-import com.udacity.asteroidradar.main.MainViewModel
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.ui.main.AsteroidListAdapter
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
+    val context = imageView.context
     if (isHazardous) {
         imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
+        imageView.contentDescription = context.getString(R.string.potentially_hazardous_asteroid_icon)
     } else {
         imageView.setImageResource(R.drawable.ic_status_normal)
+        imageView.contentDescription = context.getString(R.string.not_hazardous_asteroid_icon)
     }
 }
 

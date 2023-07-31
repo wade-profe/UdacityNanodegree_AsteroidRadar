@@ -1,7 +1,5 @@
-package com.udacity.asteroidradar.detail
+package com.udacity.asteroidradar.ui.detail
 
-
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

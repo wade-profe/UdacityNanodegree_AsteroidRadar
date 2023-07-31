@@ -1,10 +1,8 @@
-package com.udacity.asteroidradar.main
+package com.udacity.asteroidradar.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
@@ -18,7 +16,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         val binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
@@ -30,11 +28,11 @@ class MainFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        viewModel.imageOfTheDay.observe(viewLifecycleOwner, Observer {
+        viewModel.imageOfTheDay.observe(viewLifecycleOwner) {
             Picasso.with(requireContext()).load(it?.url)
                 .placeholder(R.drawable.placeholder_picture_of_day)
-                .into(binding.activityMainImageOfTheDay);
-        })
+                .into(binding.activityMainImageOfTheDay)
+        }
 
         return binding.root
     }

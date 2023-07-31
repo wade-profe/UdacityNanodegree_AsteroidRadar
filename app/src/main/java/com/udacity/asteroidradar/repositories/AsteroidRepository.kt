@@ -1,15 +1,17 @@
-package com.udacity.asteroidradar
+package com.udacity.asteroidradar.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.api.ApodService
 import com.udacity.asteroidradar.api.NeoWService
 import com.udacity.asteroidradar.api.asDatabaseModel
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.domain.asDatabaseModel
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.DatabasePictureOfDay
 import com.udacity.asteroidradar.database.asDomainModel
+import com.udacity.asteroidradar.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
