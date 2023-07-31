@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.ui.main
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,8 +16,10 @@ class MainFragment : Fragment() {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentMainBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
@@ -26,7 +29,34 @@ class MainFragment : Fragment() {
             findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
         }
 
-        setHasOptionsMenu(true)
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_overflow_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.show_saved_menu -> {
+                        viewModel.updateFilter(FilterValues.SAVED)
+                        true
+                    }
+
+                    R.id.show_today_menu -> {
+                        viewModel.updateFilter(FilterValues.DAY)
+                        true
+                    }
+
+                    R.id.show_week_menu -> {
+                        viewModel.updateFilter(FilterValues.WEEK)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+        })
 
         viewModel.imageOfTheDay.observe(viewLifecycleOwner) {
             Picasso.with(requireContext()).load(it?.url)
@@ -35,24 +65,5 @@ class MainFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_overflow_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.show_saved_menu -> {
-                viewModel.updateFilter(FilterValues.SAVED)}
-            R.id.show_today_menu -> {
-                viewModel.updateFilter(FilterValues.DAY)
-            }
-            R.id.show_week_menu -> {
-                viewModel.updateFilter(FilterValues.WEEK)
-            }
-        }
-        return true
     }
 }
